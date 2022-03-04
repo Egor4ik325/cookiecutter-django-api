@@ -1,0 +1,26 @@
+version: '3'
+
+volumes:
+  {{ cookiecutter.project_slug }}_prod_postgres_data: {}
+  {{ cookiecutter.project_slug }}_prod_postgres_data_backups: {}
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile.prod
+    image: {{ cookiecutter.project_slug }}_prod_django
+    platform: linux/x86_64
+    depends_on:
+      - postgres
+    env_file:
+      - ./server/.env.prod
+    command: bash -c "python /app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --chdir=/app"
+
+  postgres:
+    image: postgres:14.1
+    volumes:
+      - {{ cookiecutter.project_slug }}_prod_postgres_data:/var/lib/postgresql/data:Z
+      - {{ cookiecutter.project_slug }}_prod_postgres_data_backups:/backups:z
+    env_file:
+      - ./server/.env.prod

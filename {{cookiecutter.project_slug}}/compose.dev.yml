@@ -1,0 +1,32 @@
+version: '3'
+
+volumes:
+  {{ cookiecutter.project_slug }}_dev_postgres_data: {}
+  {{ cookiecutter.project_slug }}_dev_postgres_data_backups: {}
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    image: {{ cookiecutter.project_slug }}_dev_django
+    container_name: {{ cookiecutter.project_slug }}_dev_django
+    platform: linux/x86_64
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./server/.env.dev
+    ports:
+      - "8000:8000"
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+
+  postgres:
+    image: postgres:14.1
+    container_name: {{ cookiecutter.project_slug }}_dev_postgres
+    volumes:
+      - {{ cookiecutter.project_slug }}_dev_postgres_data:/var/lib/postgresql/data:Z
+      - {{ cookiecutter.project_slug }}_dev_postgres_data_backups:/backups:z
+    env_file:
+      - ./server/.env.dev

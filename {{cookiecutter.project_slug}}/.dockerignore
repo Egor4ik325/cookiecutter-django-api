@@ -1,0 +1,9 @@
+# Files not send with docker build (when COPY)
+.venv
+.vscode
+.editorconfig
+.gitattributes
+.gitignore
+.github
+.idea
+.pre-commit-config.yaml

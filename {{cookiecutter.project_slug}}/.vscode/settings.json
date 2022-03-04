@@ -1,0 +1,9 @@
+{
+  "python.pythonPath": "./server/.venv/bin/python",
+  "python.sortImports.args": [
+    "--profile=black",
+    "--settings-path=${workspaceFolder}/server/setup.cfg"
+  ],
+  "python.linting.cwd": "./server",
+  "python.testing.cwd": "./server"
+}
