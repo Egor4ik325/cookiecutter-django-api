@@ -27,14 +27,10 @@ and copy & pase.
 
 ## Manual configuration
 
-```json
-{
-  "cloud_provider": ["AWS", "GCP", "None"],
-  "mail_service": ["Mailgun"],
-  "use_compressor": "n",
-  "use_sentry": "n",
-  "use_whitenoise": "n",
-  "use_heroku": "n",
-  "ci_tool": ["None", "Travis", "Gitlab", "Github"]
-}
-```
+- Cloud: AWS/DigitalOcean/Heroku
+
+- CI: Github Actions/GitLab/Travis
+
+- Mail: MailGun/SendGrid/SES
+
+- Addons: Postgres/Celery/Whitenoise

@@ -15,7 +15,7 @@ services:
       - postgres
     env_file:
       - ./server/.env.prod
-    command: bash -c "python /app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --chdir=/app"
+    command: bash -c "cd server && python /app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --chdir=/app"
 
   postgres:
     image: postgres:14.1

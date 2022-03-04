@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     # Describe the name of email field (used in get_email_field)
     EMAIL_FIELD = "email"
-    # Fields required when using `createsuperuser` command (excluding `USERNAME_FIELD` and `password`)
+    # Fields required when using `createsuperuser` command
     REQUIRED_FIELDS = ["username"]  # + `email` + `password`
 
     objects = UserManager()
