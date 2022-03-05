@@ -24,16 +24,16 @@ if __name__ == "__main__":
     sys.path.append(str(current_path / "apps"))
 
     # Start debug server for VS Code
-    from django.conf import settings
-    if settings.DEBUG:
-        if os.environ.get("RUN_MAIN") or os.environ.get("WERKZEUG_RUN_MAIN"):
-            import logging
+    # from django.conf import settings
+    # if settings.DEBUG:
+    #     if os.environ.get("RUN_MAIN") or os.environ.get("WERKZEUG_RUN_MAIN"):
+    #         import logging
 
-            import debugpy
+    #         import debugpy
 
-            # Run debug server, server for any client
-            debugpy.listen(("0.0.0.0", 5000))
-            # debugpy.wait_for_client() # application won't start until client will be attached
-            logging.debug("Client has been attached!")
+    #         # Run debug server, server for any client
+    #         debugpy.listen(("0.0.0.0", 5000))
+    #         # debugpy.wait_for_client() # application won't start until client will be attached
+    #         logging.debug("Client has been attached!")
 
     execute_from_command_line(sys.argv)

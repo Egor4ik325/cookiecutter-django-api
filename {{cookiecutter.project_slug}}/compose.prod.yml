@@ -18,7 +18,8 @@ services:
     command: bash -c "cd server && python /app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --chdir=/app"
 
   postgres:
-    image: postgres:14.1
+    image: postgres:14
+    image: {{ cookiecutter.project_slug }}_prod_postgres
     volumes:
       - {{ cookiecutter.project_slug }}_prod_postgres_data:/var/lib/postgresql/data:Z
       - {{ cookiecutter.project_slug }}_prod_postgres_data_backups:/backups:z

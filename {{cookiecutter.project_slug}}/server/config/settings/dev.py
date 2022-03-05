@@ -9,12 +9,12 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 # Caches
 #
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "",
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+#         "LOCATION": "",
+#     }
+# }
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
@@ -37,8 +37,10 @@ CACHES = {
 
 # django-extensions
 #
-INSTALLED_APPS += ["django_extensions"]
+INSTALLED_APPS += [
+    "django_extensions",
+]
 
 # django-cors-headers
 #
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
+CORS_ALLOW_ALL_ORIGINS = True

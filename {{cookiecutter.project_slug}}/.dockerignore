@@ -5,5 +5,4 @@
 .gitattributes
 .gitignore
 .github
-.idea
 .pre-commit-config.yaml

@@ -4,16 +4,16 @@
 #
 Django==4.0.2
 argon2-cffi==21.3.0
-psycopg2==2.9.3
-django-allauth==0.48.0
+psycopg2-binary==2.9.3
+django-allauth==0.48.0 # registration is needed in every project
 django-environ==0.8.1
 django-filter==21.1
-django-cors-headers==3.11.0
 
 # API
 #
 djangorestframework==3.13.1
 drf-spectacular==0.21.2
+django-cors-headers==3.11.0
 
 # Optional
 #
@@ -24,6 +24,7 @@ drf-spectacular==0.21.2
 # shortuuid
 # dj-rest-auth==2.2.3
 # djangorestframework-simplejwt==5.0.0
+# django-rest-knox
 
 # Additional packages
 #

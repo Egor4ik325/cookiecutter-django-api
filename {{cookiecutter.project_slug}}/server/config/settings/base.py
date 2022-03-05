@@ -12,7 +12,7 @@ env = Env()
 # DJANGO_DEBUG can be only set by Docker (and Docker only will be used in production)
 DEBUG = env.bool("DJANGO_DEBUG", True)
 
-if DEBUG == True:
+if DEBUG == True:  # change to READ_DEV_DOTENV
     # OS environment variables take precedence over variables from .env
     env.read_env(str(ROOT_DIR / ".env.dev"))
 
@@ -28,16 +28,16 @@ USE_TZ = True
 
 # Databases
 #
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": str(ROOT_DIR / "db.sqlite3"),
-        "ATOMIC_REQUESTS": True,
-    }
-}
 # DATABASES = {
 #     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": str(ROOT_DIR / "db.sqlite3"),
+#         "ATOMIC_REQUESTS": True,
+#     }
+# }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
 #         "HOST": env("POSTGRES_HOST"),
 #         "PORT": env("POSTGRES_PORT"),
 #         "NAME": env("POSTGRES_DB"),
@@ -46,6 +46,17 @@ DATABASES = {
 #         "ATOMIC_REQUESTS": True,
 #     }
 # }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "ATOMIC_REQUESTS": True,
+    }
+}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # URLs
@@ -63,7 +74,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.auth",
     "django.contrib.admin",
-    # "django.contrib.postgres",
+    "django.contrib.postgres",
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -73,8 +84,9 @@ THIRD_PARTY_APPS = [
     # "allauth.account",
     # "allauth.socialaccount",
     # "rest_framework.authtoken",
+    # "dj_rest_auth",
+    # "dj_rest_auth.registration",
 ]
-
 LOCAL_APPS = [
     "apps.users",
 ]
@@ -109,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 #
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    # "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -152,7 +164,6 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                # "apps.users.context_processors.allauth_settings",
             ],
         },
     }
@@ -227,9 +238,7 @@ REST_FRAMEWORK = {
 #
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
-SOCIALACCOUNT_ADAPTER = (
-    "{{cookiecutter.project_slug}}.users.adapters.SocialAccountAdapter"
-)
+SOCIALACCOUNT_ADAPTER = "apps.users.adapters.SocialAccountAdapter"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_USERNAME_MIN_LENGTH = 2

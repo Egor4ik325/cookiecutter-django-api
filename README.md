@@ -21,6 +21,24 @@ Cookiecutter template for creating Django-backed API or SPA
 For any other features go to https://github.dev/cookiecutter/cookiecutter-django
 and copy & pase.
 
+## Features
+
+Features included (CONSIDERED MUST-HAVE): django, postgres, api docs, rest
+framework, vscode specific, admin, allauth
+
+Optional features: testing
+
+Additional features: ...
+
+# Customize
+
+- Authentication
+
+  - backend (allauth/token + ...)
+  - method
+  - profile model
+  - urls
+
 ## File structure
 
 - server (API for backend/microservice)
@@ -33,4 +51,5 @@ and copy & pase.
 
 - Mail: MailGun/SendGrid/SES
 
-- Addons: Postgres/Celery/Whitenoise
+- Addons: Postgres, Celery, Redis, Whitenoise, Celery Beat, Anymail backend,
+  Nginx, Flower, React
