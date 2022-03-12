@@ -1,5 +1,10 @@
 """
 Base settings to build other settings files upon.
+
+Less:
+- environment variable-based configuration
+- overriding
+- defaults
 """
 from pathlib import Path
 
@@ -9,13 +14,10 @@ ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / "apps"
 env = Env()
 
-# DJANGO_DEBUG can be only set by Docker (and Docker only will be used in production)
-DEBUG = env.bool("DJANGO_DEBUG", True)
-
-if DEBUG == True:  # change to READ_DEV_DOTENV
-    # OS environment variables take precedence over variables from .env
+# DJANGO_READ_DOT_ENV_DEV=false can be set by Docker (production)
+if env.bool("DJANGO_READ_DOT_ENV_DEV", True):
+    # OS environment variables take precedence over variables from .env.xxx
     env.read_env(str(ROOT_DIR / ".env.dev"))
-
 
 # General
 #
@@ -25,38 +27,6 @@ SITE_ID = 1
 USE_I18N = False
 USE_L10N = False
 USE_TZ = True
-
-# Databases
-#
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": str(ROOT_DIR / "db.sqlite3"),
-#         "ATOMIC_REQUESTS": True,
-#     }
-# }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": env("POSTGRES_HOST"),
-#         "PORT": env("POSTGRES_PORT"),
-#         "NAME": env("POSTGRES_DB"),
-#         "USER": env("POSTGRES_USER"),
-#         "PASSWORD": env("POSTGRES_PASSWORD"),
-#         "ATOMIC_REQUESTS": True,
-#     }
-# }
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": env("POSTGRES_HOST"),
-        "PORT": env("POSTGRES_PORT"),
-        "NAME": env("POSTGRES_DB"),
-        "USER": env("POSTGRES_USER"),
-        "PASSWORD": env("POSTGRES_PASSWORD"),
-        "ATOMIC_REQUESTS": True,
-    }
-}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # URLs
@@ -80,8 +50,8 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
-    # "allauth",
-    # "allauth.account",
+    "allauth",
+    "allauth.account",
     # "allauth.socialaccount",
     # "rest_framework.authtoken",
     # "dj_rest_auth",
@@ -96,14 +66,14 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 #
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    # "allauth.account.auth_backends.AuthenticationBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",  # django-allauth
 ]
 AUTH_USER_MODEL = "users.User"
 
 # Passwords
 #
 PASSWORD_HASHERS = [
-    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.Argon2PasswordHasher",  # argon2-cffi
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
@@ -121,7 +91,7 @@ AUTH_PASSWORD_VALIDATORS = [
 #
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # django-cors-headers
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -171,24 +141,10 @@ TEMPLATES = [
 
 # Security
 #
-# https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
 SESSION_COOKIE_HTTPONLY = True
-# https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
-# https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
-
-# Email
-#
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
-)
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
-EMAIL_TIMEOUT = 5
 
 # Admin
 #
@@ -223,7 +179,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
-        # "rest_framework.renderers.BrowsableAPIRenderer",
+        # "rest_framework.renderers.BrowsableAPIRenderer",  # use Swagger UI docs
     ],
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
@@ -231,7 +187,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": [],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    # "EXCEPTION_HANDLER": "apps.handlers.exception_handler",
+    "EXCEPTION_HANDLER": "apps.handlers.exception_handler",
 }
 
 # django-allauth
@@ -246,6 +202,13 @@ ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"  # TODO: set to mandatory
 
+# dj-rest-auth
+#
+REST_AUTH_SERIALIZERS = {
+    # Serializer for retrieving and updating user
+    "USER_DETAILS_SERIALIZER": "apps.users.auth.serializers.UserSerializer",
+}
+
 # django-cors-headers
 #
 CORS_URLS_REGEX = r"^/api/.*$"
@@ -257,6 +220,7 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "{{ cookiecutter.project_name }} API",
     "DESCRIPTION": "Documentation of API endpoints of {{ cookiecutter.project_name }}",
     "VERSION": "1.0.0",
+    "SCHEMA_PATH_PREFIX": "/api",
     "SERVERS": [
         {
             "url": "http://127.0.0.1:8000",

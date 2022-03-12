@@ -9,20 +9,20 @@
       "args": ["runserver"],
       "django": true,
       "justMyCode": false
-    },
-    {
-      "name": "Python: Django container",
-      "type": "python",
-      "request": "attach",
-      "pathMappings": [
-        {
-          "localRoot": "${workspaceFolder}/server",
-          "remoteRoot": "/app"
-        }
-      ],
-      // Debug server will be forwarded from Docker
-      "port": 5000,
-      "host": "127.0.0.1"
     }
+    // {
+    //   "name": "Python: Django container",
+    //   "type": "python",
+    //   "request": "attach",
+    //   "pathMappings": [
+    //     {
+    //       "localRoot": "${workspaceFolder}/server",
+    //       "remoteRoot": "/app"
+    //     }
+    //   ],
+    //   // Debug server will be forwarded from Docker
+    //   "port": 5000,
+    //   "host": "127.0.0.1"
+    // }
   ]
 }

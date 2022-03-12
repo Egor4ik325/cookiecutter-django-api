@@ -1,8 +1,8 @@
 # {{ cookiecutter.project_name }}
 
-## Git
+## 1. Git
 
-If version control is needed do:
+Initialize:
 
 ```sh
 git init
@@ -16,93 +16,106 @@ git push -u origin main
 or clone:
 
 ```sh
-git clone https://github.com/user/repo.git
+git clone https://github.com/user/thisproject.git
+git commit -m "Setup project"
+git branch -M main
 ```
 
-## Setup
+## 2. Local setup
 
-Setup locally (for VS Code):
+Setup locally, on host (e.g. for VS Code) using `venv` module:
 
 ```sh
+# Create .env.dev environment variables file based on .env.dev.example
+# ...
+
 cd server
 
-# Python-3.10.0 using pyenv
+# Create env using using python-3.10.0 (pyenv )
 ~/.pyenv/versions/3.10.0/bin/python -m venv .venv
 
 # Activate virtual environment
 source .venv/bin/activate
-
-# Create .env.dev based on .env.dev.example
-# ...
 
 # Update pip and install development dependencies:
 pip install -U pip
 pip install -r requirements/dev.txt
 ```
 
-Setup docker:
+## 3. Docker
+
+Create/start a server:
 
 ```sh
 # Build image, create containers and attach
 docker compose -f compose.dev.yml up --build
+
+docker compose -f compose.dev.yml up
 ```
 
-## Migrate
+Stop/remove a server:
 
 ```sh
-# 1. Make migrations
-./manage.py makemigrations --dry-run  # see if there are changes to the models
-./manage.py makemigrations  # make migration files
+docker compose -f compose.dev.yml down
+# or docker-compose -f compose.dev.yml stop
 
-# 2. Apply migrations
-./manage.py showmigrations  # see if there are unapplied migrations
-./manage.py migrate  # apply all migrations
+# Remove containers, networks, in-use images, dangling images, named volumes, anonymous volumes
+docker compose -f compose.dev.yml down --rmi local \
+    --volumes  # remove mounted volumes (eg. source code)
+```
+
+> To check, run: `docker container ls --all`, `docker network ls`, `docker image ls --all`, `docker volume ls`
+
+## 4. Frontend
+
+```sh
+cd app
+
+npm install
+npm start
 ```
 
 ## Install a new package:
 
-Install on local machine:
+Locally:
 
 ```sh
 pip install package
-# add "package==version" to requirements.txt...
+
+# Add `package==version` to requirements.txt
+# ..
 ```
 
-Add new package to the image:
+Docker:
 
 ```sh
-# Stop container + remove container, anonymous volume and image
-# (to prevent taking a lot of memory)
-docker compose -f compose.dev.yml rm --stop --volumes django
-docker image rm {{ cookiecutter.project_slug }}_dev_django
-
-# Rebuild image and recreate a container
-docker compose -f compose.dev.yml up --build django
-```
-
-## Start/stop a server
-
-```sh
-docker compose -f compose.dev.yml up
-docker compose -f compose.dev.yml down # or stop
-```
-
-## Create/remove a server
-
-```sh
+docker compose -f compose.dev.yml down --rmi local
 docker compose -f compose.dev.yml up --build
-# Remove containers, networks, in-use images, dangling images, named volumes, anonymous volumes
-docker compose -f compose.dev.yml down --rmi all --volumes
 ```
 
-Check:
+## Migrations
+
+Make migrations:
 
 ```sh
-docker container ls --all
-docker network ls
-docker image ls --all
-docker volume ls
+# See if there are changes to the models
+./manage.py makemigrations --dry-run
+# Make migration files
+./manage.py makemigrations
 ```
+
+Apply migrations:
+
+```sh
+# See if there are unapplied migrations
+./manage.py showmigrations
+# Apply all migrations
+./manage.py migrate
+```
+
+## Configuration
+
+All sensitive configuration settings should be specified through environment variable fields (`.env.dev` and `.env.prod`).
 
 ## Server URLs
 
@@ -114,22 +127,35 @@ To get a complete list of all server URLs (admin routes + API endpoints) run
 To turn registration on/off use boolean `DJANGO_ACCOUNT_ALLOW_REGISTRATION`
 environment variable set in `.env.xxx` file.
 
+## Administration
+
+To create admin user run `./manage.py createsuperuser`.
+
+Admin interface is served from `/admin/`.
+
 ## Documentation
 
 OpenAPI 3.0 YAML schema is accessible from `/api/schema/` URL. Can be generated
 by running `./manage.py spectacular --file schema.yml`.
 
-Swagger UI is served from `/api/swagger/`.
+Swagger UI is served from `/swagger/`.
 
 ## Testing
 
-To execute tests run `pytest` in `server` folder.
+To execute tests run `pytest` in `server` folder if they are available.
 
-## Frontend
+## Production
+
+Create `.env.prod` based on `.env.prod.example` in `server` folder.
+
+Run a production compose:
 
 ```sh
-cd app
+docker compose -f compose.prod.yml up --build
+```
 
-npm install
-npm start
+Run commands inside created django container:
+
+```sh
+docker compose -f compose.prod.yml run --rm django bash
 ```

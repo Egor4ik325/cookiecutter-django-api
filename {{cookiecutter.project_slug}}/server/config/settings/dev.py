@@ -1,20 +1,47 @@
 from .base import *
 from .base import env
 
-SECRET_KEY = env(
-    "DJANGO_SECRET_KEY",
-    default="c8Gzi5V1SmXruar4hRv0iZvuwF9n10369HnbyL8cSxb6OgbIa17WoqzB2BJjSCdM",
-)
+# General
+#
+DEBUG = True
+SECRET_KEY = "c8Gzi5V1SmXruar4hRv0iZvuwF9n10369HnbyL8cSxb6OgbIa17WoqzB2BJjSCdM"
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
-# Caches
+# Databases
 #
-# CACHES = {
+# DATABASES = {
 #     "default": {
-#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-#         "LOCATION": "",
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": str(ROOT_DIR / "db.sqlite3"),
+#         "ATOMIC_REQUESTS": True,
 #     }
 # }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "ATOMIC_REQUESTS": True,
+    }
+}
+
+# Email
+#
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+EMAIL_BACKEND = "django.core.mail.backends.smtp.ConsoleBackend"
+
+# django-extensions
+#
+INSTALLED_APPS += [
+    "django_extensions",
+]
+
+# django-cors-headers
+#
+CORS_ALLOW_ALL_ORIGINS = True
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
@@ -34,13 +61,3 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 #     INTERNAL_IPS.extend(ips)
 # except socket.gaierror:
 #     pass
-
-# django-extensions
-#
-INSTALLED_APPS += [
-    "django_extensions",
-]
-
-# django-cors-headers
-#
-CORS_ALLOW_ALL_ORIGINS = True

@@ -16,5 +16,5 @@ urlpatterns += [
     # Authentication, registration, profile/account management
     path("api/auth/", include("config.auth_urls")),
     # OpenAPI schema, Swagger UI
-    path("api/", include("config.doc_urls")),
+    path("", include("config.doc_urls")),
 ]
