@@ -113,6 +113,14 @@ Apply migrations:
 ./manage.py migrate
 ```
 
+## Features
+
+-   admin interface
+-   swagger ui api docs
+-   development/production separation
+-   docker compose setup
+-   pre-defined authentication
+
 ## Configuration
 
 All sensitive configuration settings should be specified through environment variable fields (`.env.dev` and `.env.prod`).

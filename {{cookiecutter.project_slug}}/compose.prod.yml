@@ -15,11 +15,13 @@ services:
       - postgres
     env_file:
       - ./server/.env.prod
-    command: bash -c "cd server && python /app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --chdir=/app"
+    command: bash -c "python /app/manage.py migrate && python /app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:5000 --chdir=/app"
+    ports:
+      - "5000:5000"
 
   postgres:
     image: postgres:14
-    image: {{ cookiecutter.project_slug }}_prod_postgres
+    container_name: {{ cookiecutter.project_slug }}_prod_postgres
     volumes:
       - {{ cookiecutter.project_slug }}_prod_postgres_data:/var/lib/postgresql/data:Z
       - {{ cookiecutter.project_slug }}_prod_postgres_data_backups:/backups:z

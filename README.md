@@ -45,7 +45,7 @@ Additional features: ...
 
 ## Manual configuration
 
-- Cloud: AWS/DigitalOcean/Heroku
+- Cloud: Heroku/DigitalOcean/AWS
 
 - CI: Github Actions/GitLab/Travis
 
@@ -53,3 +53,13 @@ Additional features: ...
 
 - Addons: Postgres, Celery, Redis, Whitenoise, Celery Beat, Anymail backend,
   Nginx, Flower, React
+
+## Deployment
+
+Options:
+
+1. For small project (Django & React): Heroku + Netlify + Whitenoise + Mailgun +
+   Porkbun
+
+2. For bigger project (Django & React): DigitalOcean + Nginx + Let's Encrypt +
+   Mailgun + Porkbun

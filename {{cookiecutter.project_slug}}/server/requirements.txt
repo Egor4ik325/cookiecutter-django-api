@@ -1,0 +1,2 @@
+# Heroku top-level requirements.txt file
+-r ./requirements/prod.txt
