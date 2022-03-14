@@ -1,0 +1,17 @@
+version: '3'
+
+volumes:
+  {{ cookiecutter.project_slug }}_dev_postgres_data: {}
+  {{ cookiecutter.project_slug }}_dev_postgres_data_backups: {}
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: {{ cookiecutter.project_slug }}_dev_postgres
+    volumes:
+      - {{ cookiecutter.project_slug }}_dev_postgres_data:/var/lib/postgresql/data:Z
+      - {{ cookiecutter.project_slug }}_dev_postgres_data_backups:/backups:z
+    env_file:
+      - ./server/.env.dev
+    ports:
+      - "5432:5432"

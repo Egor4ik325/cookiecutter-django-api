@@ -1,10 +1,5 @@
 """
 Base settings to build other settings files upon.
-
-Less:
-- environment variable-based configuration
-- overriding
-- defaults
 """
 from pathlib import Path
 
@@ -50,6 +45,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
+    "django_filters",
     "allauth",
     "allauth.account",
     # "allauth.socialaccount",
@@ -65,7 +61,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # Authentication
 #
 AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
+    "django.contrib.auth.backends.ModelBackend",  # used only by `django.contrib.admin`
     "allauth.account.auth_backends.AuthenticationBackend",  # django-allauth
 ]
 AUTH_USER_MODEL = "users.User"
@@ -96,7 +92,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",  # used only by `django.contrib.admin`
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -170,13 +166,22 @@ LOGGING = {
             "formatter": "verbose",
         }
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {
+        "level": "INFO",
+        "handlers": ["console"],
+    },
 }
 
 # django-rest-framework
 #
 REST_FRAMEWORK = {
+    # Authentication
     "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "UNAUTHENTICATED_USER": "django.contrib.auth.models.AnonymousUser",
+    "UNAUTHENTICATED_TOKEN": None,
+    # Authorization
+    "DEFAULT_PERMISSION_CLASSES": [],
+    # Other
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
         # "rest_framework.renderers.BrowsableAPIRenderer",  # use Swagger UI docs
@@ -185,9 +190,24 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.JSONParser",
         "rest_framework.parsers.MultiPartParser",
     ],
-    "DEFAULT_PERMISSION_CLASSES": [],
+    "DEFAULT_CONTENT_NEGOTIATION_CLASS": "rest_framework.negotiation.DefaultContentNegotiation",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "EXCEPTION_HANDLER": "apps.handlers.exception_handler",
+    # Throttling
+    "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.UserRateThrottle"],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "100/minute",
+        "user": "100/minute",
+    },
+    # Pagination and filtering
+    "DEFAULT_PAGINATION_CLASS": None,
+    "PAGE_SIZE": 10,
+    "PAGE_PARAM": "page",
+    "MAX_PAGE_SIZE": 30,
+    "PAGE_SIZE_PARAM": "page_size",
+    "DEFAULT_FILTER_BACKENDS": None,
+    "SEARCH_PARAM": "search",
+    "ORDERING_PARAM": "ordering",
 }
 
 # django-allauth
@@ -221,14 +241,4 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Documentation of API endpoints of {{ cookiecutter.project_name }}",
     "VERSION": "1.0.0",
     "SCHEMA_PATH_PREFIX": "/api",
-    "SERVERS": [
-        {
-            "url": "http://127.0.0.1:8000",
-            "description": "Local Development server",
-        },
-        {
-            "url": "https://example.com",
-            "description": "Production server",
-        },
-    ],
 }

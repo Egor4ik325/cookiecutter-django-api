@@ -6,10 +6,11 @@ Initialize:
 
 ```sh
 git init
+git remote add origin https://github.com/user/repo.git
+
 git add .
 git commit -m "Setup project"
 git branch -M main
-git remote add origin https://github.com/user/repo.git
 git push -u origin main
 ```
 
@@ -17,8 +18,11 @@ or clone:
 
 ```sh
 git clone https://github.com/user/thisproject.git
+
+git add .
 git commit -m "Setup project"
 git branch -M main
+git push -u origin main
 ```
 
 ## 2. Local setup
@@ -31,7 +35,7 @@ Setup locally, on host (e.g. for VS Code) using `venv` module:
 
 cd server
 
-# Create env using using python-3.10.0 (pyenv )
+# Create env using using python-3.10.0 (pyenv)
 ~/.pyenv/versions/3.10.0/bin/python -m venv .venv
 
 # Activate virtual environment
@@ -39,12 +43,19 @@ source .venv/bin/activate
 
 # Update pip and install development dependencies:
 pip install -U pip
+pip install wheel
 pip install -r requirements/dev.txt
+```
+
+Start local server (after postgres container):
+
+```sh
+./manage.py runserver
 ```
 
 ## 3. Docker
 
-Create/start a server:
+Create/start a compose:
 
 ```sh
 # Build image, create containers and attach
@@ -53,7 +64,7 @@ docker compose -f compose.dev.yml up --build
 docker compose -f compose.dev.yml up
 ```
 
-Stop/remove a server:
+Stop/remove a compose:
 
 ```sh
 docker compose -f compose.dev.yml down
@@ -100,26 +111,38 @@ Make migrations:
 ```sh
 # See if there are changes to the models
 ./manage.py makemigrations --dry-run
+
 # Make migration files
 ./manage.py makemigrations
 ```
 
-Apply migrations:
+Apply all migrations:
 
 ```sh
 # See if there are unapplied migrations
 ./manage.py showmigrations
-# Apply all migrations
+
 ./manage.py migrate
+```
+
+Un apply migrations to a particular app:
+
+```sh
+./manage.py migrate app zero
 ```
 
 ## Features
 
+-   docker compose
+    -   django local development
+    -   django container development
+    -   django container production
 -   admin interface
 -   swagger ui api docs
--   development/production separation
--   docker compose setup
--   pre-defined authentication
+-   postgres database
+-   pre-configured settings
+-   pre-defined users
+-   default global api throttling
 
 ## Configuration
 
@@ -143,7 +166,7 @@ Admin interface is served from `/admin/`.
 
 ## Documentation
 
-OpenAPI 3.0 YAML schema is accessible from `/api/schema/` URL. Can be generated
+OpenAPI 3.0 YAML schema is accessible from `/schema/` URL. Can be generated
 by running `./manage.py spectacular --file schema.yml`.
 
 Swagger UI is served from `/swagger/`.
@@ -152,9 +175,23 @@ Swagger UI is served from `/swagger/`.
 
 To execute tests run `pytest` in `server` folder if they are available.
 
+## Development
+
+In development either run django locally or containerized, both with postgres inside of the container.
+
+For local change `DJANGO_READ_DOT_ENV_DEV` to `true` and `POSTGRES_HOST` to `localhost`.
+For container change `DJANGO_READ_DOT_ENV_DEV` to `false` and `POSTGRES_HOST` to `postgres`.
+
+To execute commands inside django container run:
+
+```sh
+docker compose -f compose.dev.yml run --rm django bash
+```
+
 ## Production
 
 Create `.env.prod` based on `.env.prod.example` in `server` folder.
+If you don't need HTTPs then comment out security settings defined in `prod.py` file.
 
 Run a production compose:
 

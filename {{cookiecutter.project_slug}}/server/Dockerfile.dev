@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   libpq-dev
 
 COPY ./server/requirements .
+RUN pip install -U pip
 RUN pip wheel --wheel-dir /usr/src/app/wheels -r ${BUILD_ENVIRONMENT}.txt
 
 
@@ -35,6 +36,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 # copy python dependency wheels from python-build-stage
 COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 # use wheels to install python dependencies
+RUN pip install -U pip
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* && rm -rf /wheels/
 
 COPY ./server/entrypoint.sh /entrypoint.sh

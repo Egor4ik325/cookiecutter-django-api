@@ -30,7 +30,64 @@ Optional features: testing
 
 Additional features: ...
 
-# Customize
+## Install
+
+```sh
+pipx install cookiecutter
+```
+
+## Setup
+
+Create a project from template:
+
+```sh
+cookiecutter cookiecutter-django-api
+> Super Project
+> super_project
+
+# `mkdir super-project` if needed
+
+# Move files into version controlled repository
+move -r super_project/. super-project
+rmdir super_project
+```
+
+Customize project:
+
+- comment/uncomment dependencies (`base.txt`, `dev.txt`, `prod.txt`)
+
+- configure settings (`base.py`)
+
+- add authentication method (packages, configuration, urls)
+
+Add version control (Git):
+
+```sh
+# Clone empty repository under version control
+git clone https://github.com/user/super-project
+
+
+# Commit project setup
+git add .
+git commit -m "Setup project"
+git branch -M main
+git push -u origin main
+```
+
+or initialize and add remote repo
+
+```sh
+git init
+git remote add origin https://github.com/user/super-project
+
+# Commit project setup
+git add .
+git commit -m "Setup project"
+git branch -M main
+git push -u origin main
+```
+
+## Customize
 
 - Authentication
 

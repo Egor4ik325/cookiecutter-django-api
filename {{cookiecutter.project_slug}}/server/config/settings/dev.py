@@ -5,7 +5,7 @@ from .base import env
 #
 DEBUG = True
 SECRET_KEY = "c8Gzi5V1SmXruar4hRv0iZvuwF9n10369HnbyL8cSxb6OgbIa17WoqzB2BJjSCdM"
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 # Databases
 #
