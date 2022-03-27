@@ -133,16 +133,16 @@ Un apply migrations to a particular app:
 
 ## Features
 
--   docker compose
-    -   django local development
-    -   django container development
-    -   django container production
--   admin interface
--   swagger ui api docs
--   postgres database
--   pre-configured settings
--   pre-defined users
--   default global api throttling
+- docker compose
+  - django local development
+  - django container development
+  - django container production
+- admin interface
+- swagger ui api docs
+- postgres database
+- pre-configured settings
+- pre-defined users
+- default global api throttling
 
 ## Configuration
 

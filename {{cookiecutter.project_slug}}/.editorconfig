@@ -1,5 +1,5 @@
 # EditorConfig is awesome: https://EditorConfig.org
-# I don't use editorconfig (VS Code settings.json) but for collaboration it is awesome
+# I use VS Code editor settings instead of EditorConfig
 
 root = true
 

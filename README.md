@@ -21,6 +21,12 @@ Cookiecutter template for creating Django-backed API or SPA
 For any other features go to https://github.dev/cookiecutter/cookiecutter-django
 and copy & pase.
 
+## Checklist
+
+- [ ] React building and serving from django (docker compose in dev/prod)
+
+- [ ] HTTPs in development and production (self signing, let's encrypt)
+
 ## Features
 
 Features included (CONSIDERED MUST-HAVE): django, postgres, api docs, rest
@@ -30,20 +36,18 @@ Optional features: testing
 
 Additional features: ...
 
-## Install
+## Setup
 
 ```sh
 pipx install cookiecutter
 ```
 
-## Setup
-
 Create a project from template:
 
 ```sh
 cookiecutter cookiecutter-django-api
-> Super Project
-> super_project
+# > Super Project
+# > super_project
 
 # `mkdir super-project` if needed
 
@@ -99,6 +103,18 @@ git push -u origin main
 ## File structure
 
 - server (API for backend/microservice)
+- app (frontend for backend)
+- proxy (proxy for backend and frontend or microservice)
+
+## Frontend
+
+```sh
+cd super_project
+
+cookiecutter ../cookiecutter-react-spa
+# > Super Project
+# > app
+```
 
 ## Manual configuration
 

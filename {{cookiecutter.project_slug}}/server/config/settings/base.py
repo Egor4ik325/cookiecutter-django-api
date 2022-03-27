@@ -33,11 +33,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 #
 DJANGO_APPS = [
     "django.contrib.contenttypes",
-    "django.contrib.messages",
-    "django.contrib.sessions",
+    "django.contrib.messages",  # used only by `django.contrib.admin`
+    "django.contrib.sessions",  # used only by `django.contrib.admin`
     "django.contrib.sites",
     "django.contrib.staticfiles",
-    "django.contrib.auth",
+    "django.contrib.auth",  # used only by `django.contrib.admin`
     "django.contrib.admin",
     "django.contrib.postgres",
 ]
@@ -83,7 +83,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Middleware
+# Middleware (used only by `django.contrib.admin`)
 #
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -92,7 +92,7 @@ MIDDLEWARE = [
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",  # used only by `django.contrib.admin`
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -144,7 +144,6 @@ X_FRAME_OPTIONS = "DENY"
 
 # Admin
 #
-# Django Admin URL.
 ADMIN_URL = "admin/"
 ADMINS = [("Egor Zorin", "nezort11@gmail.com")]
 MANAGERS = ADMINS
@@ -175,24 +174,21 @@ LOGGING = {
 # django-rest-framework
 #
 REST_FRAMEWORK = {
-    # Authentication
     "DEFAULT_AUTHENTICATION_CLASSES": [],
-    "UNAUTHENTICATED_USER": "django.contrib.auth.models.AnonymousUser",
-    "UNAUTHENTICATED_TOKEN": None,
-    # Authorization
     "DEFAULT_PERMISSION_CLASSES": [],
-    # Other
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
         # "rest_framework.renderers.BrowsableAPIRenderer",  # use Swagger UI docs
     ],
     "DEFAULT_PARSER_CLASSES": [
         "rest_framework.parsers.JSONParser",
-        "rest_framework.parsers.MultiPartParser",
+        "rest_framework.parsers.MultiPartParser",  # or use base64
     ],
-    "DEFAULT_CONTENT_NEGOTIATION_CLASS": "rest_framework.negotiation.DefaultContentNegotiation",
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",  # drf-spectacular
     "EXCEPTION_HANDLER": "apps.handlers.exception_handler",
+    "DEFAULT_CONTENT_NEGOTIATION_CLASS": "rest_framework.negotiation.DefaultContentNegotiation",
+    "UNAUTHENTICATED_USER": "django.contrib.auth.models.AnonymousUser",
+    "UNAUTHENTICATED_TOKEN": None,
     # Throttling
     "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.UserRateThrottle"],
     "DEFAULT_THROTTLE_RATES": {
@@ -201,26 +197,25 @@ REST_FRAMEWORK = {
     },
     # Pagination and filtering
     "DEFAULT_PAGINATION_CLASS": None,
-    "PAGE_SIZE": 10,
-    "PAGE_PARAM": "page",
-    "MAX_PAGE_SIZE": 30,
-    "PAGE_SIZE_PARAM": "page_size",
     "DEFAULT_FILTER_BACKENDS": None,
+    "PAGE_PARAM": "page",
+    "PAGE_SIZE_PARAM": "page_size",
     "SEARCH_PARAM": "search",
     "ORDERING_PARAM": "ordering",
+    "PAGE_SIZE": 10,
+    "MAX_PAGE_SIZE": 30,
 }
 
 # django-allauth
 #
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
-ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
+ACCOUNT_ADAPTER = "apps.users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "apps.users.adapters.SocialAccountAdapter"
+ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_USERNAME_MIN_LENGTH = 2
 ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "none"  # TODO: set to mandatory
+ACCOUNT_EMAIL_VERIFICATION = "none"  # TODO: set to "mandatory"
+ACCOUNT_USERNAME_REQUIRED = True
 
 # dj-rest-auth
 #
@@ -235,7 +230,6 @@ CORS_URLS_REGEX = r"^/api/.*$"
 
 # drf-spectacular
 #
-# By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 SPECTACULAR_SETTINGS = {
     "TITLE": "{{ cookiecutter.project_name }} API",
     "DESCRIPTION": "Documentation of API endpoints of {{ cookiecutter.project_name }}",

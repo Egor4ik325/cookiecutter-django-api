@@ -1,15 +1,15 @@
 version: '3'
 
 volumes:
-  {{ cookiecutter.project_slug }}_prod_postgres_data: {}
-  {{ cookiecutter.project_slug }}_prod_postgres_data_backups: {}
+  {{ cookiecutter.project_slug_snake_case }}_prod_postgres_data: {}
+  {{ cookiecutter.project_slug_snake_case }}_prod_postgres_data_backups: {}
 
 services:
   django:
     build:
       context: .
       dockerfile: ./server/Dockerfile.prod
-    image: {{ cookiecutter.project_slug }}_prod_django
+    image: {{ cookiecutter.project_slug_snake_case }}_prod_django
     platform: linux/x86_64
     depends_on:
       - postgres
@@ -21,9 +21,10 @@ services:
 
   postgres:
     image: postgres:14
-    container_name: {{ cookiecutter.project_slug }}_prod_postgres
+    container_name: {{ cookiecutter.project_slug_snake_case }}_prod_postgres
     volumes:
-      - {{ cookiecutter.project_slug }}_prod_postgres_data:/var/lib/postgresql/data:Z
-      - {{ cookiecutter.project_slug }}_prod_postgres_data_backups:/backups:z
+      - {{ cookiecutter.project_slug_snake_case }}_prod_postgres_data:/var/lib/postgresql/data:Z
+      - {{ cookiecutter.project_slug_snake_case }}_prod_postgres_data_backups:/backups:z
     env_file:
       - ./server/.env.prod
+

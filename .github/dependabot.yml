@@ -2,6 +2,6 @@ version: 2
 
 updates:
   - package-ecosystem: pip
-    directory: /server
+    directory: /{{cookiecutter.project_slug}}/server
     schedule:
       interval: daily
