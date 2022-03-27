@@ -12,7 +12,7 @@ ipdb==0.13.9
 
 # Testing
 #
-pytest==7.0.1
+pytest==7.1.1
 # pytest-sugar==0.9.4
 # pytest-django==4.5.2
 # pytest-xdist[psutil]==2.5.0
