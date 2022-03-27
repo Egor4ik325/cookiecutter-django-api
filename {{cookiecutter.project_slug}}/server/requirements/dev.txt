@@ -1,11 +1,13 @@
 -r base.txt
 
+ipdb==0.13.9
 black==22.1.0
 # isort==5.10.1  # or use vscode's built-in
 # pylint==2.12.2  # or use vscode's built-in
 pylint-django==2.5.0
 django-extensions==3.1.5
-ipdb==0.13.9
+Werkzeug[watchgdog]==2.0.3  # interactive error debugger
+pyOpenSSL==22.0.0  # self-signed certificate in development
 
 # debugpy==1.5.1  # VS Code debug server
 # django-debug-toolbar==3.2.4

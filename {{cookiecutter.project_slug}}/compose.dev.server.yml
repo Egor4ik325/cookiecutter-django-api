@@ -21,7 +21,7 @@ services:
     ports:
       - "8000:8000"
       - "5000:5000" # VS Code debug server
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py runserver_plus --cert-file localhost 0.0.0.0:8000"
 
   postgres:
     image: postgres:14
