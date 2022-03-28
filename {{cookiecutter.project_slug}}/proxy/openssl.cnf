@@ -1,0 +1,13 @@
+# openssl req -new -newkey rsa:4096 -nodes -x509 -config openssl.cnf -keyout ./localhost.key -out ./localhost.crt
+
+[ req ]
+days                    = 3650
+prompt                  = no
+distinguished_name      = req_distinguished_name
+
+[ req_distinguished_name ]
+countryName            = "RU"
+localityName           = "Saint Petersburg"
+organizationName       = "Some Company"
+commonName             = "egorindev.com"
+emailAddress           = "nezort11@gmail.com"

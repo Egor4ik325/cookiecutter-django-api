@@ -227,3 +227,37 @@ Run commands inside created django container:
 ```sh
 docker compose -f compose.prod.yml run --rm django bash
 ```
+
+## Docker Compose
+
+- The backend and frontend are always kept separately on different servers (to
+  simplify HTTPs, static file management, building, ...).
+
+- HTTPs (certificate) is used in both development and production.
+
+- production configurations are tested in development before
+
+- to bind frontend with backend on the single machine and multiple composes use
+  `host.docker.internal:8000` on the frontend to connect to the host's `8000`
+  port (forwarded from backend). On Linux add
+  `--add-host=host.docker.internal:host-gateway` flag
+
+Development:
+
+- `compose.dev.db.yml` - postgres database container for external Django running
+  (with HTTPs)
+- `compose.dev.server.yml` - runs Django in development with self-signed HTTPs
+  by django-extensions
+- `compose.dev.server.proxy.yml` - runs Django in development under Nginx proxy
+  (for self-signed HTTPs)
+- `compose.dev.app.yml` - runs React in development with self-signed HTTPs by
+  CRA
+- `compose.dev.app.proxy.yml` - runs React in development under Nginx proxy for
+  self-signed HTTPs
+
+Production:
+
+- `compose.prod.server.yml` - run Django in production with self-signed or Let's
+  Encrypt HTTPs
+- `compose.prod.app.yml` - builds and runs React for production under Nginx
+  (static files + Let's Encrypt HTTPs)

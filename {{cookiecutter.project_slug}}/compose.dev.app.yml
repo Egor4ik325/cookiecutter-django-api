@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  react:
+    build:
+      context: ./app
+      dockerfile: ./Dockerfile.dev
+    image: {{ cookiecutter.project_slug_snake_case }}_dev_react
+    container_name: {{ cookiecutter.project_slug_snake_case }}_dev_react
+    platform: linux/x86_64
+    volumes:
+      - /app/node_modules
+      - ./app:/app:z
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    command: npm start

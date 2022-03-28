@@ -23,9 +23,11 @@ and copy & pase.
 
 ## Checklist
 
-- [ ] React building and serving from django (docker compose in dev/prod)
+- [x] Https in development + error debugging
 
-- [ ] HTTPs in development and production (self signing, let's encrypt)
+- [x] React building and serving from django (docker compose in dev/prod)
+
+- [ ] HTTPs in production (self signing, let's encrypt)
 
 ## Features
 
@@ -129,10 +131,58 @@ cookiecutter ../cookiecutter-react-spa
 
 ## Deployment
 
-Options:
+Options for deploying Django/React project:
 
-1. For small project (Django & React): Heroku + Netlify + Whitenoise + Mailgun +
-   Porkbun
+1. Small project: PaaS
 
-2. For bigger project (Django & React): DigitalOcean + Nginx + Let's Encrypt +
-   Mailgun + Porkbun
+   - hosting services: heroku + netlify
+   - https is managed by: heroku and netlify subdomains
+   - backend static files: whitenoise
+   - backend: git+slug / docker+runtime/manifest
+   - database: heroku postgres
+
+2. Medium project: VPS + PaaS
+
+   - hosting: digitalocean + netlify
+   - backend: docker + docker compose + ubuntu
+   - static files: whitehoise / nginx
+   - backend https certificate: self-signed (standalone) or letsencrypt (nginx)
+   - frontend https certificate: netlify subdomain
+   - database: self-hosted postgres container
+
+3. Big project: VPS/IaaS
+
+   - hosting: digitalocean
+   - backend: docker compose
+   - frontend: built into static files (+served from backend)
+   - proxying: nginx (/nginx-proxy/nginx-proxy-manager)
+   - static files management: nginx (/ CDN service (s3))
+   - https certificate: letsencrypt (nginx) / service (cloudflare)
+   - database: container (/ managed service Amazon RDS)
+   - redis: self-hosted / managed service
+
+4. Large project: VPS + AWS services
+
+   - compute: Amazon EC2
+   - object storage: Amazon S3
+   - database: Amazon RDS (PostgreSQL)
+   - caching/broker: Amazon MQ/Amazon MemoryDB
+   - domains: Amazon
+   - serverless?
+   - ...
+
+For any options:
+
+- domains: pornbun
+- transactional email service: mailgun
+- database: postgres
+
+## HTTPs
+
+Sometimes you may want to run your API server under HTTPs in development. For
+this case self-signed certificates will be the best way to go.
+
+Backend:
+
+- development: self-signed certificate
+- production: authority issued certificate (Let's Encrypt)
