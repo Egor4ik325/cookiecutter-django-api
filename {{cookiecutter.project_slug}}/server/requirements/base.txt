@@ -11,7 +11,7 @@ django-environ==0.8.1
 # API
 #
 djangorestframework==3.13.1
-drf-spectacular==0.21.2
+drf-spectacular==0.22.0
 django-cors-headers==3.11.0
 django-filter==21.1
 
