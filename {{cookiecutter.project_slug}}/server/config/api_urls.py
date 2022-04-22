@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.urls import path
 from rest_framework.routers import DefaultRouter, DynamicRoute, Route, SimpleRouter
 
 
@@ -13,13 +14,13 @@ class Router(DefaultRouter if settings.DEBUG else SimpleRouter):  # type: ignore
                 "post": "create",
                 "delete": "purge",
             },
-            name="{basename}-list",
+            name="{basename}_list",
             detail=False,
             initkwargs={"suffix": "List"},
         ),
         DynamicRoute(
             url=r"^{prefix}/{url_path}{trailing_slash}$",
-            name="{basename}-{url_name}",
+            name="{basename}_{url_name}",
             detail=False,
             initkwargs={},
         ),
@@ -31,13 +32,13 @@ class Router(DefaultRouter if settings.DEBUG else SimpleRouter):  # type: ignore
                 "patch": "partial_update",
                 "delete": "destroy",
             },
-            name="{basename}-detail",
+            name="{basename}_detail",
             detail=True,
             initkwargs={"suffix": "Instance"},
         ),
         DynamicRoute(
             url=r"^{prefix}/{lookup}/{url_path}{trailing_slash}$",
-            name="{basename}-{url_name}",
+            name="{basename}_{url_name}",
             detail=True,
             initkwargs={},
         ),

@@ -9,13 +9,6 @@ ALLOWED_HOSTS = ["*"]
 
 # Databases
 #
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": str(ROOT_DIR / "db.sqlite3"),
-#         "ATOMIC_REQUESTS": True,
-#     }
-# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -31,7 +24,7 @@ DATABASES = {
 # Email
 #
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = "django.core.mail.backends.smtp.ConsoleBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # django-extensions
 #
@@ -44,7 +37,7 @@ INSTALLED_APPS += [
 CORS_ALLOW_ALL_ORIGINS = True
 
 # django-debug-toolbar
-# ------------------------------------------------------------------------------
+#
 # INSTALLED_APPS += ["debug_toolbar"]
 # MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 # DEBUG_TOOLBAR_CONFIG = {

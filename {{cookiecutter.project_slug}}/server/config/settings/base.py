@@ -197,7 +197,7 @@ REST_FRAMEWORK = {
     },
     # Pagination and filtering
     "DEFAULT_PAGINATION_CLASS": None,
-    "DEFAULT_FILTER_BACKENDS": None,
+    "DEFAULT_FILTER_BACKENDS": [],
     "PAGE_PARAM": "page",
     "PAGE_SIZE_PARAM": "page_size",
     "SEARCH_PARAM": "search",
@@ -212,10 +212,11 @@ ACCOUNT_ADAPTER = "apps.users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "apps.users.adapters.SocialAccountAdapter"
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "none"  # TODO: set to "mandatory"
+ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
 ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # to disable set to "none"
 
 # dj-rest-auth
 #

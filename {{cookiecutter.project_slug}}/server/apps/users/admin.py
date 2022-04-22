@@ -55,3 +55,4 @@ class UserAdmin(AuthUserAdmin):
     )
     list_display = ["username", "is_superuser", "is_active"]
     search_fields = ["username"]
+    ordering = ["username"]
