@@ -6,7 +6,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres:14
+    image: postgres:14.2
     container_name: {{ cookiecutter.project_slug_snake_case }}_dev_postgres
     volumes:
       - {{ cookiecutter.project_slug_snake_case }}_dev_postgres_data:/var/lib/postgresql/data:Z
@@ -14,5 +14,5 @@ services:
     env_file:
       - ./server/.env.dev
     ports:
-      - "5432:5432"
+      - 5432:5432
 

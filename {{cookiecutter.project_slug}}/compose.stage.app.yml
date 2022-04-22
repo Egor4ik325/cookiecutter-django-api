@@ -1,0 +1,23 @@
+version: "3"
+
+networks:
+  delta_konnect_net:
+    name: delta_konnect_net
+
+services:
+  {{ cookiecutter.project_slug }}-react:
+    build:
+      context: ./app
+      dockerfile: ./Dockerfile.stage
+    image: {{ cookiecutter.project_slug_snake_case }}_stage_react
+    container_name: {{ cookiecutter.project_slug_snake_case }}_stage_react
+    platform: linux/amd64
+    networks:
+      - delta_konnect_net
+    volumes:
+      - /app/node_modules
+      - ./app:/app:z
+    ports:
+      - 3000:3000
+      - 3001:3001
+    command: npm start
