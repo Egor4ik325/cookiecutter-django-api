@@ -1,0 +1,55 @@
+# Development environment:
+# - postgres: container
+# - django: container
+# - [react]: container
+
+version: "3"
+
+volumes:
+  {{ cookiecutter.project_slug_snake_case }}_remotedev_postgres_data: {}
+  {{ cookiecutter.project_slug_snake_case }}_remotedev_postgres_data_backups: {}
+
+services:
+  postgres:
+    image: postgres:14.2
+    container_name: {{ cookiecutter.project_slug_snake_case }}_remotedev_postgres
+    volumes:
+      - {{ cookiecutter.project_slug_snake_case }}_remotedev_postgres_data:/var/lib/postgresql/data:Z
+      - {{ cookiecutter.project_slug_snake_case }}_remotedev_postgres_data_backups:/backups:z
+    env_file:
+      - ./server/.env.remotedev
+    expose:
+      - 5432
+
+  django:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile.remotedev
+    image: {{ cookiecutter.project_slug_snake_case }}_remotedev_django
+    container_name: {{ cookiecutter.project_slug_snake_case }}_remotedev_django
+    platform: linux/amd64
+    depends_on:
+      - postgres
+    volumes:
+      - ./server:/app:z
+    env_file:
+      - ./server/.env.remotedev
+    ports:
+      - 8000:8000
+      - 5000:5000 # VS Code debug server
+    command: bash -c "python manage.py migrate && python manage.py runserver_plus 0.0.0.0:8000"
+
+  react:
+    build:
+      context: ./app
+      dockerfile: ./Dockerfile.remotedev
+    image: {{ cookiecutter.project_slug_snake_case }}_remotedev_react
+    container_name: {{ cookiecutter.project_slug_snake_case }}_remotedev_react
+    platform: linux/amd64
+    volumes:
+      - /app/node_modules
+      - ./app:/app:z
+    ports:
+      - 3000:3000
+    command: npm start
+

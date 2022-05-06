@@ -23,13 +23,8 @@ class UserAdmin(AuthUserAdmin):
                     "username",
                     "password",
                     "email",
-                    "company_entered",
                 )
             },
-        ),
-        (
-            _("Company info"),
-            {"fields": ("company",)},
         ),
         (
             _("Permissions"),

@@ -1,2 +1,3 @@
-from .dev import *
-from .dev import env
+from .prod import *
+
+DEBUG = True

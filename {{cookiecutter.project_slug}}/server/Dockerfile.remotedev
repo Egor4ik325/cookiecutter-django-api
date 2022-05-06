@@ -1,7 +1,7 @@
-# Python build
-FROM python:3.10-bullseye as python-build
+# Python build stage
+FROM python:3.10-bullseye as python-build-stage
 
-ARG BUILD_ENVIRONMENT=stage
+ARG BUILD_ENVIRONMENT=dev
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
   build-essential \
@@ -12,10 +12,10 @@ RUN pip install -U pip
 RUN pip wheel --wheel-dir /usr/src/app/wheels -r ${BUILD_ENVIRONMENT}.txt
 
 
-# Python run
-FROM python:3.10-bullseye as python-run
+# Python 'run' stage
+FROM python:3.10-bullseye as python-run-stage
 
-ARG BUILD_ENVIRONMENT=stage
+ARG BUILD_ENVIRONMENT=dev
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -33,8 +33,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
 
-# copy python dependency wheels from python-build
-COPY --from=python-build /usr/src/app/wheels  /wheels/
+# copy python dependency wheels from python-build-stage
+COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 # use wheels to install python dependencies
 RUN pip install -U pip
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* && rm -rf /wheels/
