@@ -7,7 +7,7 @@ psycopg2-binary==2.9.3
 #
 Django==4.0.4
 django-environ==0.8.1
-django-allauth==0.50.0  # registration
+django-allauth==0.52.0  # registration
 
 # API
 #
